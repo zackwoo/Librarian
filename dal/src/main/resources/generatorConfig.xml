@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!--<classPathEntry location="C:\Users\zack.wu\Desktop\scaffolding\mybatis-plugin\target\mybatis-plugin-1.0.0.jar" />-->
+      <context id="HSQL" targetRuntime="MyBatis3">
+        <!--<property name="autoDelimitKeywords" value="true" />-->
+        <!--<property name="beginningDelimiter" value="`" />-->
+        <!--<property name="endingDelimiter" value="`" />-->
+        <jdbcConnection driverClass="org.hsqldb.jdbcDriver"
+                                         connectionURL="jdbc:hsqldb:mem:world"
+                                         userId="sa"
+                                         password="">
+      </jdbcConnection>
+        <javaModelGenerator targetPackage="com.github.librarian.model.entity" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+        <sqlMapGenerator targetPackage="com.github.librarian.model.mapper"
+                         targetProject="src/main/resources">
+        </sqlMapGenerator>
+        <javaClientGenerator targetPackage="com.github.librarian.model.mapper"
+                             targetProject="src/main/java" type="XMLMAPPER">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+
+          <table tableName="borrower"></table>
+          <table tableName="book"></table>
+          <table tableName="book_borrowing_record"></table>
+
+
+    </context>
+</generatorConfiguration>
