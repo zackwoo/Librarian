@@ -9,7 +9,7 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
     <parent>
-        <groupId>com.github.zackwoo.scaffolding</groupId>
+        <groupId>com.github.librarian</groupId>
         <artifactId>parent</artifactId>
         <relativePath>../parent/pom.xml</relativePath>
         <version>1.0.0</version>
@@ -39,8 +39,8 @@
                     <!--重写已经存在的文件-->
                     <overwrite>true</overwrite>
                     <!--初始化脚本-->
-                    <sqlScript>/Users/zachary/Librarian/war/src/main/resources/schema.sql</sqlScript>
-                    <!--<sqlScript>C:\Users\zack.wu\Desktop\scaffolding\war\src\main\resources\schema.sql</sqlScript>-->
+                    <!--<sqlScript>/Users/zachary/Librarian/war/src/main/resources/schema.sql</sqlScript>-->
+                    <sqlScript>C:\Users\zack.wu\Documents\Librarian\war\src\main\resources\schema.sql</sqlScript>
                     <jdbcDriver>org.hsqldb.jdbcDriver</jdbcDriver>
                     <jdbcURL>jdbc:hsqldb:mem:world</jdbcURL>
                 </configuration>

@@ -30,11 +30,6 @@
             <artifactId>springfox-swagger2</artifactId>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.github.zackwoo.scaffolding</groupId>
-            <artifactId>service</artifactId>
-            <version>1.0.0</version>
-        </dependency>
     </dependencies>
 
 </project>
