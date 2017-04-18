@@ -1,4 +1,4 @@
-package com.github.zackwoo.scaffolding;
+package com.github.librarian;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +19,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
 //启用Swagger2
 @EnableSwagger2
 //自动扫描包下所有mapper类
-@MapperScan("com.github.zackwoo.scaffolding.mapper")
+@MapperScan("com.github.librarian.model.mapper")
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

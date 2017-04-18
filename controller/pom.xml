@@ -9,8 +9,10 @@
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <groupId>com.github.librarian</groupId>
     <artifactId>controller</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -29,6 +31,11 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.librarian</groupId>
+            <artifactId>service</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

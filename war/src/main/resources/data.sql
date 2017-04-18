@@ -1,0 +1,1 @@
+INSERT INTO borrower (ID, Name, Email, Password, Status) VALUES (1,'zack','zack@lib.com','123456',1);

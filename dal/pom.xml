@@ -39,8 +39,8 @@
                     <!--重写已经存在的文件-->
                     <overwrite>true</overwrite>
                     <!--初始化脚本-->
-                    <!--<sqlScript>/Users/zachary/Librarian/war/src/main/resources/schema.sql</sqlScript>-->
-                    <sqlScript>C:\Users\zack.wu\Documents\Librarian\war\src\main\resources\schema.sql</sqlScript>
+                    <sqlScript>/Users/zachary/Librarian/war/src/main/resources/schema.sql</sqlScript>
+                    <!--<sqlScript>C:\Users\zack.wu\Documents\Librarian\war\src\main\resources\schema.sql</sqlScript>-->
                     <jdbcDriver>org.hsqldb.jdbcDriver</jdbcDriver>
                     <jdbcURL>jdbc:hsqldb:mem:world</jdbcURL>
                 </configuration>
