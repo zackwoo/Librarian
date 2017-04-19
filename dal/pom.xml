@@ -8,6 +8,7 @@
     <artifactId>dal</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
+
     <parent>
         <groupId>com.github.librarian</groupId>
         <artifactId>parent</artifactId>
@@ -36,11 +37,12 @@
                     </execution>
                 </executions>
                 <configuration>
+
                     <!--重写已经存在的文件-->
                     <overwrite>true</overwrite>
                     <!--初始化脚本-->
-                    <sqlScript>/Users/zachary/Librarian/war/src/main/resources/schema.sql</sqlScript>
-                    <!--<sqlScript>C:\Users\zack.wu\Documents\Librarian\war\src\main\resources\schema.sql</sqlScript>-->
+                    <!--<sqlScript>/Users/zachary/Librarian/war/src/main/resources/schema.sql</sqlScript>-->
+                    <sqlScript>C:\Users\zack.wu\Documents\Librarian\war\src\main\resources\schema.sql</sqlScript>
                     <jdbcDriver>org.hsqldb.jdbcDriver</jdbcDriver>
                     <jdbcURL>jdbc:hsqldb:mem:world</jdbcURL>
                 </configuration>
@@ -52,8 +54,8 @@
                         <version>2.3.4</version>
                     </dependency>
                     <dependency>
-                        <groupId>com.github.zackwoo.scaffolding</groupId>
-                        <artifactId>mybatis-plugin</artifactId>
+                        <groupId>com.github.zack.mybaits</groupId>
+                        <artifactId>mybaits-plugins</artifactId>
                         <version>1.0.0</version>
                     </dependency>
                 </dependencies>
@@ -61,6 +63,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>

@@ -4,8 +4,9 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <!--<classPathEntry location="C:\Users\zack.wu\Desktop\scaffolding\mybatis-plugin\target\mybatis-plugin-1.0.0.jar" />-->
+    <!--<classPathEntry location="C:\Users\zack.wu\Documents\Librarian\map-condition\target\plugins-1.0.0.jar" />-->
       <context id="HSQL" targetRuntime="MyBatis3">
+          <plugin type="com.github.zack.mybaits.plugins.MapConditionPlugin"/>
         <!--<property name="autoDelimitKeywords" value="true" />-->
         <!--<property name="beginningDelimiter" value="`" />-->
         <!--<property name="endingDelimiter" value="`" />-->
@@ -25,7 +26,6 @@
                              targetProject="src/main/java" type="XMLMAPPER">
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
-
 
           <table tableName="borrower"></table>
           <table tableName="book"></table>
