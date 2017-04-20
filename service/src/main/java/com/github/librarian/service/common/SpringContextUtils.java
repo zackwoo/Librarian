@@ -1,4 +1,4 @@
-package com.github.librarian.config;
+package com.github.librarian.service.common;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

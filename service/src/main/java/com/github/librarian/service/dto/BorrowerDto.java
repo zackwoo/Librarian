@@ -1,39 +1,51 @@
 package com.github.librarian.service.dto;
 
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 /**
  * Created by zack.wu on 2017/4/18.
  */
+@Component
 public class BorrowerDto  {
-    private Integer borrowerId;
-    private String borrowerName;
-    private Integer borrowerStatus;
+    private Integer id;
+    private String name;
+    private Integer email;
+    private  Integer status;
     private List<BorrowerBookDto> booksDto;
 
-    public Integer getBorrowerId() {
-        return borrowerId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setBorrowerId(Integer borrowerId) {
-        this.borrowerId = borrowerId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getBorrowerName() {
-        return borrowerName;
+    public String getName() {
+        return name;
     }
 
-    public void setBorrowerName(String borrowerName) {
-        this.borrowerName = borrowerName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Integer getBorrowerStatus() {
-        return borrowerStatus;
+    public Integer getEmail() {
+        return email;
     }
 
-    public void setBorrowerStatus(Integer borrowerStatus) {
-        this.borrowerStatus = borrowerStatus;
+    public void setEmail(Integer email) {
+        this.email = email;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public List<BorrowerBookDto> getBooksDto() {

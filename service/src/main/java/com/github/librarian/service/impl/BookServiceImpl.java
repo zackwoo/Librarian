@@ -3,6 +3,7 @@ package com.github.librarian.service.impl;
 import com.github.librarian.service.dto.BookDto;
 import com.github.librarian.service.interfaces.IBookService;
 import com.github.pagehelper.PageInfo;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
