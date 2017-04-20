@@ -1,11 +1,17 @@
 package com.github.librarian.controller;
 
 import com.github.librarian.config.SpringContextUtils;
-import com.github.librarian.model.entity.BookExample;
+import com.github.librarian.model.entity.BorrowerExample;
+import com.github.librarian.model.mapper.BookMapper;
+import com.github.librarian.model.mapper.BorrowerMapper;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiParam;
+import org.apache.commons.beanutils.MethodUtils;
+import org.springframework.util.ClassUtils;
+import org.springframework.web.bind.annotation.*;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 /**
  * Created by zack.wu on 2017/4/19.
@@ -16,14 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class GeneralController {
 
     @GetMapping("/")
-    private void GetItem(String mapperClass,Object id) throws ClassNotFoundException {
-        String className = "com.github.librarian.model.mapper."+mapperClass+"Mapper";
-        Class<?> aClass = Class.forName(className);
+    private Object GetItem(@ApiParam(defaultValue = "Borrower") @RequestParam String mapperClass, @ApiParam(defaultValue = "{IdEqualTo:1}") Map<String,Object> map)
+            throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        String mapperClassName = "com.github.librarian.model.mapper."+mapperClass+"Mapper";
+        String exampleClassName = "com.github.librarian.model.entity."+mapperClass+"Example";
+        Class<?> aClass = Class.forName(mapperClassName);
         Object mapper = SpringContextUtils.getBeanByClass(aClass);
 
-        BookExample bookExample = new BookExample();
-        BookExample.Criteria criteria = bookExample.createCriteria();
-         //criteria.andMap();
+        Object example = Class.forName(exampleClassName).newInstance();
+        Object criteria = MethodUtils.invokeMethod(example,"or",null);
+        MethodUtils.invokeMethod(criteria,"andMap",map);
+        return MethodUtils.invokeMethod(mapper,"selectByExample",example);
         
     }
 }
