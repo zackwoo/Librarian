@@ -12,7 +12,7 @@ import java.util.List;
 public class BorrowerDto  {
     private Integer id;
     private String name;
-    private Integer email;
+    private String email;
     private  Integer status;
     private List<BorrowerBookDto> booksDto;
 
@@ -32,11 +32,11 @@ public class BorrowerDto  {
         this.name = name;
     }
 
-    public Integer getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(Integer email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 

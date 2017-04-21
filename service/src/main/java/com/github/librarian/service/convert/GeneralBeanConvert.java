@@ -1,4 +1,4 @@
-package com.github.librarian.service.common;
+package com.github.librarian.service.convert;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Component;

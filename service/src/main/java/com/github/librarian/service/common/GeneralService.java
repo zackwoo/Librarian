@@ -3,12 +3,9 @@ package com.github.librarian.service.common;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.MethodUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -33,41 +30,59 @@ public class GeneralService {
     public Object selectByExample(String mapperClass,Map map,String convertClassId,String dtoClassId)
             throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         logger.info("传入参数:"+ JSON.toJSONString(map));
-        if (StringUtils.isEmpty(dtoClassId)){
-            dtoClassId = mapperClass+"Dto"; // 默认dto对象
-        }
+
         List listEntity; //原始dataobject
-        Object btoBean; //需要转换后的dto
+        List convertListEntity; //转化厚的对象
         try{
             Object mapper = getMapperObject(mapperClass);
-            String exampleClassName = mapperClass+"Example";
-            Object example = SpringContextUtils.getBeanById(exampleClassName);
+            Object example = getExampleObject(mapperClass);
             Object criteria = MethodUtils.invokeMethod(example,"or",null);
             MethodUtils.invokeMethod(criteria,"andMap",map);
-            if(isPaging(map)){
-                PageHelper.startPage(getPageNumber(map),getPageSize(map));
-            }
-            listEntity = (List) MethodUtils.invokeMethod(mapper, "selectByExample", example);
+            listEntity = queryList(map, mapper, example);
         }catch (NoSuchBeanDefinitionException exception){
             logger.error(exception.getMessage());
             throw exception;
         }
-        PageInfo pageInfo = null;
+
+        Class dtoBeanClass = getDtoBeanClass(mapperClass, dtoClassId);
+        if (dtoBeanClass != null){
+            //需要转化
+            Object convertObject = getConvertObject(convertClassId);
+            convertListEntity = (List) MethodUtils.invokeMethod(convertObject,"Convert",new Object[]{listEntity,dtoBeanClass});
+        }else{
+            convertListEntity = listEntity;
+        }
         if(isPaging(map)){
-            pageInfo = new PageInfo(listEntity);
+            PageInfo pageInfo = new PageInfo(listEntity);
+            pageInfo.setList(convertListEntity);
+            return  pageInfo;
+        }
+        return listEntity;
+    }
+
+    private Class getDtoBeanClass(String mapperClass,String dtoClassId){
+        if (StringUtils.isEmpty(dtoClassId)){
+            dtoClassId = mapperClass+"Dto"; // 默认dto对象
         }
         try{
-            btoBean = SpringContextUtils.getBeanById(dtoClassId);
+            Object bean = SpringContextUtils.getBeanById(dtoClassId);
+            return  bean.getClass();
         }catch (NoSuchBeanDefinitionException exception){
             //不做转换
-            if(isPaging(map)){
-                return pageInfo;
-            }
-            return  listEntity;
+           return null;
         }
-        Object convertObject = getConvertObject(convertClassId);
-        pageInfo.setList((List) MethodUtils.invokeMethod(convertObject,"Convert",new Object[]{listEntity,btoBean.getClass()}));
-        return pageInfo;
+    }
+
+    private List queryList(Map map, Object mapper, Object example) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        if(isPaging(map)){
+            PageHelper.startPage(getPageNumber(map),getPageSize(map));
+        }
+        return  (List) MethodUtils.invokeMethod(mapper, "selectByExample", example);
+    }
+
+    private Object getExampleObject(String mapperClass) {
+        String exampleClassName = mapperClass+"Example";
+        return SpringContextUtils.getBeanById(exampleClassName);
     }
 
     public int insert(String mapperClass,Object dto,String convertClassId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
