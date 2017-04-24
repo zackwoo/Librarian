@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
@@ -24,15 +25,20 @@ public class GeneralService {
 
     public Object selectByExample(String mapperClass, Map map)
             throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-       return selectByExample(mapperClass,map,"","");
+        return selectByExample(mapperClass,map,"",null);
     }
 
-    public Object selectByExample(String mapperClass,Map map,String convertClassId,String dtoClassId)
+    public Object selectByExample(String mapperClass, Map map,Class dtoBeanClass)
+            throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        return selectByExample(mapperClass,map,"",dtoBeanClass);
+    }
+
+    public Object selectByExample(String mapperClass,Map map,String convertClassId,Class dtoBeanClass)
             throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         logger.info("传入参数:"+ JSON.toJSONString(map));
 
         List listEntity; //原始dataobject
-        List convertListEntity; //转化厚的对象
+        List convertListEntity; //转化后的对象
         try{
             Object mapper = getMapperObject(mapperClass);
             Object example = getExampleObject(mapperClass);
@@ -44,7 +50,6 @@ public class GeneralService {
             throw exception;
         }
 
-        Class dtoBeanClass = getDtoBeanClass(mapperClass, dtoClassId);
         if (dtoBeanClass != null){
             //需要转化
             Object convertObject = getConvertObject(convertClassId);
@@ -60,18 +65,7 @@ public class GeneralService {
         return listEntity;
     }
 
-    private Class getDtoBeanClass(String mapperClass,String dtoClassId){
-        if (StringUtils.isEmpty(dtoClassId)){
-            dtoClassId = mapperClass+"Dto"; // 默认dto对象
-        }
-        try{
-            Object bean = SpringContextUtils.getBeanById(dtoClassId);
-            return  bean.getClass();
-        }catch (NoSuchBeanDefinitionException exception){
-            //不做转换
-           return null;
-        }
-    }
+
 
     private List queryList(Map map, Object mapper, Object example) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         if(isPaging(map)){
@@ -89,8 +83,17 @@ public class GeneralService {
         try{
             Object mapper = getMapperObject(mapperClass);
             Object convertObject = getConvertObject(convertClassId);
-            Object entityObject = SpringContextUtils.getBeanById(mapperClass);
-            Object entity = MethodUtils.invokeMethod(convertObject, "Convert", new Object[]{dto, entityObject.getClass()});
+            Class<?> entityClass =null;
+            for (Method method:mapper.getClass().getMethods()){
+                if(method.getName().equals("selectByPrimaryKey")){
+                    entityClass = method.getReturnType();
+                    break;
+                }
+            }
+            if (null==entityClass){
+                throw new NoSuchMethodException("selectByPrimaryKey method not find");
+            }
+            Object entity = MethodUtils.invokeMethod(convertObject, "Convert", new Object[]{dto, entityClass});
             return (Integer) MethodUtils.invokeMethod(mapper,"insert",entity);
         }catch (NoSuchBeanDefinitionException exception){
             logger.error(exception.getMessage());
@@ -146,5 +149,19 @@ public class GeneralService {
     private Object getMapperObject(String mapperClass) {
         String mapperClassName = mapperClass+"Mapper";
         return SpringContextUtils.getBeanById(mapperClassName);
+    }
+
+    private Class<?> getEntityClass(Object mapper) throws NoSuchMethodException {
+        Class<?> entityClass =null;
+        for (Method method:mapper.getClass().getMethods()){
+            if(method.getName().equals("selectByPrimaryKey")){
+                entityClass = method.getReturnType();
+                break;
+            }
+        }
+        if (null==entityClass){
+            throw new NoSuchMethodException("selectByPrimaryKey method not find");
+        }
+        return  entityClass;
     }
 }

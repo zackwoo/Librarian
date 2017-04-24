@@ -3,6 +3,7 @@ package com.github.librarian.controller;
 import com.alibaba.fastjson.JSON;
 import com.github.librarian.service.common.GeneralService;
 import com.github.librarian.service.dto.BorrowerDto;
+import com.github.librarian.service.dto.BorrowerRegisterDto;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -41,12 +42,13 @@ public class BorrowerController {
         logger.info("controller 参数："+ mapJson);
         Map map = JSON.parseObject(mapJson, Map.class);
 
-        return (PageInfo<BorrowerDto>) generalService.selectByExample("borrower", map);
+        return (PageInfo<BorrowerDto>) generalService.selectByExample("borrower", map,BorrowerDto.class);
+
     }
 
-    @PostMapping("/")
-    private int addBorrower(@RequestBody BorrowerDto dto) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        return  generalService.insert("borrower", dto,"BorrowerDto2EntityConvert");
+    @PostMapping("/register")
+    private int addBorrower(@RequestBody BorrowerRegisterDto dto) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return  generalService.insert("borrower", dto,"BorrowerRegisterDto2EntityConvert");
     }
 
 
