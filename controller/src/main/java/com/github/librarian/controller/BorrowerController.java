@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.github.librarian.service.common.GeneralService;
 import com.github.librarian.service.dto.BorrowerDto;
 import com.github.librarian.service.dto.BorrowerRegisterDto;
+import com.github.librarian.service.interfaces.IBorrowerService;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.beanutils.BeanMap;
 import org.apache.commons.beanutils.BeanUtils;
@@ -35,9 +37,13 @@ public class BorrowerController {
     @Autowired
     private GeneralService generalService;
 
+    @Autowired
+    private IBorrowerService borrowerService;
+
 
     @GetMapping("/")
-    private PageInfo<BorrowerDto> queryBorrower(@RequestParam @ApiParam(defaultValue = "{pageNumber:1,NameLike:'%a%'}") String mapJson)
+    @ApiOperation(value = "管理员查看当前借阅者借阅状态")
+    private PageInfo<BorrowerDto> queryBorrower(@RequestParam @ApiParam(defaultValue = "{pageNumber:1,NameLike:\"%a%\"}") String mapJson)
             throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         logger.info("controller 参数："+ mapJson);
         Map map = JSON.parseObject(mapJson, Map.class);
@@ -47,9 +53,21 @@ public class BorrowerController {
     }
 
     @PostMapping("/register")
+    @ApiOperation(value = "借阅者注册")
     private int addBorrower(@RequestBody BorrowerRegisterDto dto) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         return  generalService.insert("borrower", dto,"BorrowerRegisterDto2EntityConvert");
     }
 
+    @PutMapping("/ban")
+    @ApiOperation(value = "冻结借阅者")
+    private boolean ban(@RequestBody Integer borrowerId){
+        return borrowerService.ban(borrowerId);
+    }
+
+    @PutMapping("/enable")
+    @ApiOperation(value = "解冻借阅者")
+    private boolean enable(@RequestBody Integer borrowerId){
+        return borrowerService.enable(borrowerId);
+    }
 
 }

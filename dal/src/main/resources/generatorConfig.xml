@@ -6,6 +6,7 @@
 <generatorConfiguration>
     <!--<classPathEntry location="C:\Users\zack.wu\Documents\Librarian\map-condition\target\plugins-1.0.0.jar" />-->
       <context id="HSQL" targetRuntime="MyBatis3">
+          <plugin type="com.github.zack.mybaits.plugins.ModelExampleAnnotationPlugin"/>
           <plugin type="com.github.zack.mybaits.plugins.MapConditionPlugin"/>
         <!--<property name="autoDelimitKeywords" value="true" />-->
         <!--<property name="beginningDelimiter" value="`" />-->

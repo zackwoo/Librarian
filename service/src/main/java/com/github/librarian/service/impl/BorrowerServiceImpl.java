@@ -1,5 +1,6 @@
 package com.github.librarian.service.impl;
 
+import com.github.librarian.model.custom.BorrowerCustomMapper;
 import com.github.librarian.model.mapper.BorrowerMapper;
 import com.github.librarian.service.dto.BorrowerDto;
 import com.github.librarian.service.dto.BorrowerRegisterDto;
@@ -16,21 +17,13 @@ import org.springframework.stereotype.Service;
 public class BorrowerServiceImpl implements IBorrowerService{
 
     @Autowired
-    private BorrowerMapper mapper;
-
-    public void register(BorrowerRegisterDto borrowerRegisterDto) {
-
-    }
+    private BorrowerCustomMapper mapper;
 
     public boolean ban(int borrowerId) {
-        return false;
+        return mapper.ban(borrowerId) == 1;
     }
 
     public boolean enable(int borrowerId) {
         return false;
-    }
-
-    public PageInfo<BorrowerDto> queryBorrower(int pageNumber, int pageSize) {
-        return null;
     }
 }

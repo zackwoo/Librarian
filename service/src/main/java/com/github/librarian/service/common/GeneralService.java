@@ -23,6 +23,25 @@ import java.util.Map;
 public class GeneralService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    public Object selectByPrimaryKey(String mapperClass, Object id) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return selectByPrimaryKey(mapperClass,id,"",null);
+    }
+    public Object selectByPrimaryKey(String mapperClass, Object id,Class dtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return selectByPrimaryKey(mapperClass,id,"",dtoBeanClass);
+    }
+
+    public Object selectByPrimaryKey(String mapperClass, Object id,String convertClassId,Class dtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Object mapperObject = getMapperObject(mapperClass);
+        Object entity = MethodUtils.invokeMethod(mapperObject, "selectByPrimaryKey", id);
+        if (dtoBeanClass != null){
+            //需要转化
+            Object convertObject = getConvertObject(convertClassId);
+            return MethodUtils.invokeMethod(convertObject,"Convert",new Object[]{entity,dtoBeanClass});
+        }else{
+            return entity;
+        }
+    }
+
     public Object selectByExample(String mapperClass, Map map)
             throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         return selectByExample(mapperClass,map,"",null);
@@ -65,20 +84,6 @@ public class GeneralService {
         return listEntity;
     }
 
-
-
-    private List queryList(Map map, Object mapper, Object example) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        if(isPaging(map)){
-            PageHelper.startPage(getPageNumber(map),getPageSize(map));
-        }
-        return  (List) MethodUtils.invokeMethod(mapper, "selectByExample", example);
-    }
-
-    private Object getExampleObject(String mapperClass) {
-        String exampleClassName = mapperClass+"Example";
-        return SpringContextUtils.getBeanById(exampleClassName);
-    }
-
     public int insert(String mapperClass,Object dto,String convertClassId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         try{
             Object mapper = getMapperObject(mapperClass);
@@ -112,7 +117,17 @@ public class GeneralService {
             throw exception;
         }
     }
+    private List queryList(Map map, Object mapper, Object example) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        if(isPaging(map)){
+            PageHelper.startPage(getPageNumber(map),getPageSize(map));
+        }
+        return  (List) MethodUtils.invokeMethod(mapper, "selectByExample", example);
+    }
 
+    private Object getExampleObject(String mapperClass) {
+        String exampleClassName = mapperClass+"Example";
+        return SpringContextUtils.getBeanById(exampleClassName);
+    }
 
     /**
      * 是否需要分页

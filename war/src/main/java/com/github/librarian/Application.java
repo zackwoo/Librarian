@@ -20,7 +20,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
 //启用Swagger2
 @EnableSwagger2
 //自动扫描包下所有mapper类
-@MapperScan("com.github.librarian.model.mapper")
+@MapperScan({"com.github.librarian.model.mapper","com.github.librarian.model.custom"})
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
