@@ -33,11 +33,11 @@ public class GeneralService {
     public Object selectByPrimaryKey(String mapperClass, Object id,String convertClassId,Class dtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Object mapperObject = getMapperObject(mapperClass);
         Object entity = MethodUtils.invokeMethod(mapperObject, "selectByPrimaryKey", id);
-        if (dtoBeanClass != null){
+        if (dtoBeanClass != null && entity != null) {
             //需要转化
             Object convertObject = getConvertObject(convertClassId);
-            return MethodUtils.invokeMethod(convertObject,"Convert",new Object[]{entity,dtoBeanClass});
-        }else{
+            return MethodUtils.invokeMethod(convertObject, "Convert", new Object[]{entity, dtoBeanClass});
+        } else {
             return entity;
         }
     }
@@ -84,6 +84,9 @@ public class GeneralService {
         return listEntity;
     }
 
+    public int insert(String mapperClass,Object dto) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return  insert(mapperClass,dto,"");
+    }
     public int insert(String mapperClass,Object dto,String convertClassId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         try{
             Object mapper = getMapperObject(mapperClass);
@@ -105,6 +108,7 @@ public class GeneralService {
             throw exception;
         }
     }
+
     public int updateByPrimaryKey(String mapperClass,Object dto,String convertClassId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         try{
             Object mapper = getMapperObject(mapperClass);
