@@ -7,7 +7,15 @@ public class AddBookDto {
     private String isbn;
     private String name;
     private String intro;
-    private  int count;
+    private Integer bookcount;
+
+    public Integer getBookcount() {
+        return bookcount;
+    }
+
+    public void setBookcount(Integer bookcount) {
+        this.bookcount = bookcount;
+    }
 
     public String getIsbn() {
         return isbn;
@@ -33,11 +41,5 @@ public class AddBookDto {
         this.intro = intro;
     }
 
-    public int getCount() {
-        return count;
-    }
 
-    public void setCount(int count) {
-        this.count = count;
-    }
 }

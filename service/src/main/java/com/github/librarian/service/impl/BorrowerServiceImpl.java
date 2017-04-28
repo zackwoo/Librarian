@@ -24,6 +24,6 @@ public class BorrowerServiceImpl implements IBorrowerService{
     }
 
     public boolean enable(int borrowerId) {
-        return false;
+        return mapper.enable(borrowerId) == 1;
     }
 }

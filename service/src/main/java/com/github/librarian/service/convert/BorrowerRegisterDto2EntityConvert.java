@@ -8,8 +8,8 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by zachary on 2017/4/21.
  */
-@Component("BorrowerRegisterDto2EntityConvert")
-public class BorrowerRegisterDto2EntityConvert extends GeneralBeanConvert {
+@Component
+public class BorrowerRegisterDto2EntityConvert extends BeanConvertAbs {
     @Override
     public Object Convert(Object source, Class targetClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         Borrower borrower = (Borrower) super.Convert(source, targetClass);

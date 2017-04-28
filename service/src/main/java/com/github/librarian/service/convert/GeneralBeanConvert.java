@@ -10,19 +10,7 @@ import java.util.List;
 /**
  * Created by zack.wu on 2017/4/20.
  */
-@Component("GeneralConvert")
-public class GeneralBeanConvert {
-    public  Object Convert(Object source,Class targetClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        Object target = targetClass.newInstance();
-        BeanUtils.copyProperties(target,source);
-        return  target;
-    }
+@Component
+public class GeneralBeanConvert extends BeanConvertAbs {
 
-    public List Convert(List source, Class targetClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        ArrayList arrayList = new ArrayList();
-        for (Object item : source){
-            arrayList.add(Convert(item,targetClass));
-        }
-        return  arrayList;
-    }
 }

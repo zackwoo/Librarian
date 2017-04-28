@@ -1,7 +1,10 @@
 package com.github.librarian.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.github.librarian.service.common.GeneralService;
+import com.github.librarian.model.entity.BorrowerExample;
+import com.github.librarian.model.mapper.BorrowerMapper;
+import com.github.librarian.service.common.IGeneralService;
+import com.github.librarian.service.convert.BorrowerRegisterDto2EntityConvert;
 import com.github.librarian.service.dto.BorrowerDto;
 import com.github.librarian.service.dto.BorrowerRegisterDto;
 import com.github.librarian.service.interfaces.IBorrowerService;
@@ -35,7 +38,7 @@ public class BorrowerController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private GeneralService generalService;
+    private IGeneralService generalService;
 
     @Autowired
     private IBorrowerService borrowerService;
@@ -48,14 +51,14 @@ public class BorrowerController {
         logger.info("controller 参数："+ mapJson);
         Map map = JSON.parseObject(mapJson, Map.class);
 
-        return (PageInfo<BorrowerDto>) generalService.selectByExample("borrower", map,BorrowerDto.class);
+        return (PageInfo<BorrowerDto>) generalService.selectByExampleWithPaging(BorrowerMapper.class, BorrowerExample.class, map,BorrowerDto.class);
 
     }
 
     @PostMapping("/register")
     @ApiOperation(value = "借阅者注册")
     private int addBorrower(@RequestBody BorrowerRegisterDto dto) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        return  generalService.insert("borrower", dto,"BorrowerRegisterDto2EntityConvert");
+        return  generalService.insert(BorrowerMapper.class, dto, BorrowerRegisterDto2EntityConvert.class);
     }
 
     @PutMapping("/ban")
