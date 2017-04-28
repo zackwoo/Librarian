@@ -32,10 +32,13 @@ public class BookController {
     @Autowired
     IGeneralService generalService;
 
+    @Autowired
+    IBookService bookService;
+
     @ApiOperation(value = "根据图书编号查询单本图书")
     @GetMapping("queryBookByISBN")
     private BookDto queryBookByISBN(@ApiParam(value = "图书编号",defaultValue = "9047-64-438-933-93") @RequestParam String isbn) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        return (BookDto)generalService.selectByPrimaryKey(BookMapper.class,isbn,BookDto.class);
+        return bookService.queryBookByISBN(isbn);
     }
 
 
@@ -50,23 +53,13 @@ public class BookController {
     @ApiOperation(value = "添加书籍",notes = "书籍如果已经存在则返回false")
     @PostMapping("addBook")
     private boolean addBook(@RequestBody AddBookDto dto) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        Object book = generalService.selectByPrimaryKey(BookMapper.class, dto.getIsbn());
-        if (book != null) return false;
-        int count = generalService.insert(BookMapper.class, dto, GeneralBeanConvert.class);
-        return count == 1;
+      return bookService.addBook(dto);
     }
 
     @ApiOperation(value = "图书损耗",notes = "损耗的数目不能大于现有图书的数目")
     @PutMapping("lossBook")
     private boolean lossBook(@RequestBody LossBookDto dto) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        Object book = generalService.selectByPrimaryKey(BookMapper.class, dto.getIsbn());
-        if (book == null) return false;//未查到图书
-
-        Book bookEntity = (Book) book;
-        Integer bookcount = bookEntity.getBookcount();
-        if (bookcount<dto.getCount()) return false;//图书数量不够
-        bookEntity.setBookcount(bookcount-dto.getCount());
-        return generalService.updateByPrimaryKey(BookMapper.class,bookEntity) == 1;
+        return bookService.loss(dto);
     }
 
 }
