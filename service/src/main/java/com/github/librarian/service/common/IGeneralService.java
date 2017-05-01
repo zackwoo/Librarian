@@ -10,9 +10,9 @@ import java.util.Map;
  * Created by zack.wu on 2017/4/28.
  */
 public interface IGeneralService {
-    Object selectByPrimaryKey(Class mapperClass, Object id) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
-    Object selectByPrimaryKey(Class mapperClass, Object id,Class returnDtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;;
-    Object selectByPrimaryKey(Class mapperClass, Object id,Class returnDtoBeanClass,Class convertClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+    <T>T selectByPrimaryKey(Class mapperClass, Object id) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+    <T>T selectByPrimaryKey(Class mapperClass, Object id,Class<T> returnDtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;;
+    <T>T selectByPrimaryKey(Class mapperClass, Object id,Class<T> returnDtoBeanClass,Class convertClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
 
     List<Object> selectByExample(Class mapperClass,Class exampleClass,Map arguments) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
     List<Object> selectByExample(Class mapperClass,Class exampleClass,Map arguments,Class returnDtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;

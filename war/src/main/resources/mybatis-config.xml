@@ -20,6 +20,9 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+    <typeHandlers>
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="com.github.librarian.model.enums.BorrowerStatus"></typeHandler>
+    </typeHandlers>
     <plugins>
         <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin>
     </plugins>
@@ -31,4 +34,5 @@
     <!--<mappers>-->
         <!--<mapper resource="mapper/DatabaseConfigMapper.xml"/>-->
     <!--</mappers>-->
+
 </configuration>

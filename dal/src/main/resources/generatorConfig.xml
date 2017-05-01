@@ -28,7 +28,9 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-          <table tableName="borrower"></table>
+          <table tableName="borrower">
+              <columnOverride column="Status" javaType="com.github.librarian.model.enums.BorrowerStatus" ></columnOverride>
+          </table>
           <table tableName="book"></table>
           <table tableName="book_borrowing_record"></table>
 

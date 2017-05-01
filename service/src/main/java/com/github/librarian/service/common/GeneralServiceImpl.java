@@ -129,7 +129,8 @@ public class GeneralServiceImpl implements IGeneralService {
         if(isPaging(map)){
             PageHelper.startPage(getPageNumber(map),getPageSize(map));
         }
-        return  (List) MethodUtils.invokeMethod(mapper, "selectByExample", example);
+        Object selectByExample = MethodUtils.invokeMethod(mapper, "selectByExample", example);
+        return  (List) selectByExample;
     }
 
     //返回数据库实体对象类型

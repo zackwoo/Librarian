@@ -1,6 +1,7 @@
 package com.github.librarian.service.dto;
 
 
+import com.github.librarian.model.enums.BorrowerStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public class BorrowerDto  {
     private Integer id;
     private String name;
     private String email;
-    private  Integer status;
+    private BorrowerStatus status;
     private List<BorrowerBookDto> booksDto;
 
     public Integer getId() {
@@ -40,11 +41,11 @@ public class BorrowerDto  {
         this.email = email;
     }
 
-    public Integer getStatus() {
+    public BorrowerStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(BorrowerStatus status) {
         this.status = status;
     }
 
