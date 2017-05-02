@@ -30,25 +30,31 @@ public class GeneralServiceImpl implements IGeneralService {
         return convertData(returnDtoBeanClass, convertClass, entity);
     }
 
-    public List<Object> selectByExample(Class mapperClass, Class exampleClass, Map arguments) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public List<?> selectByExample(Class mapperClass, Class exampleClass, Map arguments) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Object mapper = SpringContextUtils.getBeanByClass(mapperClass);
+        Object example = getExampleObject(exampleClass, arguments);
+        return  queryList(arguments, mapper, example);
+    }
+
+    private Object getExampleObject(Class exampleClass, Map arguments) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Object example = SpringContextUtils.getBeanByClass(exampleClass);
         Object criteria = MethodUtils.invokeMethod(example, "or", null);
         MethodUtils.invokeMethod(criteria, "andMap", arguments);
-        return  queryList(arguments, mapper, example);
+        return example;
     }
-    public List<Object> selectByExample(Class mapperClass, Class exampleClass, Map arguments, Class returnDtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+
+    public List<?> selectByExample(Class mapperClass, Class exampleClass, Map arguments, Class returnDtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Object convertObject = SpringContextUtils.getBeanById("generalBeanConvert");
         return selectByExample(mapperClass,exampleClass,arguments,returnDtoBeanClass,convertObject.getClass());
     }
 
-    public List<Object> selectByExample(Class mapperClass, Class exampleClass, Map arguments, Class returnDtoBeanClass, Class convertClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        List<Object> list = selectByExample(mapperClass, exampleClass, arguments);
-        return (List<Object>) convertData(returnDtoBeanClass,convertClass,list);
+    public List<?> selectByExample(Class mapperClass, Class exampleClass, Map arguments, Class returnDtoBeanClass, Class convertClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        List<?> list = selectByExample(mapperClass, exampleClass, arguments);
+        return (List<?>) convertData(returnDtoBeanClass,convertClass,list);
     }
 
     public PageInfo<?> selectByExampleWithPaging(Class mapperClass, Class exampleClass, Map arguments) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        List<Object> objects = selectByExample(mapperClass, exampleClass, arguments);
+        List<?> objects = selectByExample(mapperClass, exampleClass, arguments);
         return new PageInfo(objects);
     }
 
@@ -84,6 +90,23 @@ public class GeneralServiceImpl implements IGeneralService {
     public Integer updateByPrimaryKey(Class mapperClass, Object databaseEntity) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Object mapper = SpringContextUtils.getBeanByClass(mapperClass);
         return (Integer) MethodUtils.invokeMethod(mapper,"updateByPrimaryKey",databaseEntity);
+    }
+
+    public Long countByExample(Class mapperClass, Class exampleClass, Map arguments) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Object mapper = SpringContextUtils.getBeanByClass(mapperClass);
+        Object exampleObject = getExampleObject(exampleClass, arguments);
+        return (Long) MethodUtils.invokeMethod(mapper,"countByExample",exampleObject);
+    }
+
+    public Integer deleteByExample(Class mapperClass, Class exampleClass, Map arguments) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Object mapper = SpringContextUtils.getBeanByClass(mapperClass);
+        Object exampleObject = getExampleObject(exampleClass, arguments);
+        return (Integer) MethodUtils.invokeMethod(mapper,"deleteByExample",exampleObject);
+    }
+
+    public Integer deleteByPrimaryKey(Class mapperClass, Object id) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Object mapperObject = SpringContextUtils.getBeanByClass(mapperClass);
+        return (Integer) MethodUtils.invokeMethod(mapperObject, "deleteByPrimaryKey", id);
     }
 
     /**

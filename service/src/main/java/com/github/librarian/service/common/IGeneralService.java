@@ -14,9 +14,9 @@ public interface IGeneralService {
     <T>T selectByPrimaryKey(Class mapperClass, Object id,Class<T> returnDtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;;
     <T>T selectByPrimaryKey(Class mapperClass, Object id,Class<T> returnDtoBeanClass,Class convertClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
 
-    List<Object> selectByExample(Class mapperClass,Class exampleClass,Map arguments) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
-    List<Object> selectByExample(Class mapperClass,Class exampleClass,Map arguments,Class returnDtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
-    List<Object> selectByExample(Class mapperClass,Class exampleClass,Map arguments,Class returnDtoBeanClass,Class convertClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+    List<?> selectByExample(Class mapperClass,Class exampleClass,Map arguments) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+   List<?> selectByExample(Class mapperClass,Class exampleClass,Map arguments,Class returnDtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+   List<?> selectByExample(Class mapperClass,Class exampleClass,Map arguments,Class returnDtoBeanClass,Class convertClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
 
     PageInfo<?> selectByExampleWithPaging(Class mapperClass, Class exampleClass, Map arguments) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
     PageInfo<?> selectByExampleWithPaging(Class mapperClass,Class exampleClass,Map arguments,Class returnDtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
@@ -28,5 +28,10 @@ public interface IGeneralService {
 
     Integer updateByPrimaryKey(Class mapperClass,Object dto,Class convertClass) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException;
     Integer updateByPrimaryKey(Class mapperClass,Object databaseEntity) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+
+    Long countByExample(Class mapperClass,Class exampleClass,Map arguments) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+    Integer deleteByExample(Class mapperClass,Class exampleClass,Map arguments) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+    Integer deleteByPrimaryKey(Class mapperClass,Object id) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+
 
 }
