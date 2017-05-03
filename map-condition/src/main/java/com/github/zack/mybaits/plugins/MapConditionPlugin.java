@@ -45,6 +45,9 @@ public class MapConditionPlugin extends PluginAdapter {
             String upperCasePropertyName = StringUtils.capitalize(column.getJavaProperty());
             String columnJavaTypeShortName = column.getFullyQualifiedJavaType().getShortName();
 
+            if (column.isBLOBColumn() )
+                continue;
+
             for (int i = 0; i < methods.length; i++) {
                 createMethodBody(method, upperCasePropertyName + methods[i], columnJavaTypeShortName);
             }

@@ -1,7 +1,9 @@
 package com.github.librarian.service.common;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.beanutils.BeanMap;
 import org.apache.commons.beanutils.MethodUtils;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,7 @@ import java.util.Map;
 /**
  * Created by zack.wu on 2017/4/28.
  */
+
 @Component
 public class GeneralServiceImpl implements IGeneralService {
     public Object selectByPrimaryKey(Class mapperClass, Object id) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
@@ -36,6 +39,14 @@ public class GeneralServiceImpl implements IGeneralService {
         return  queryList(arguments, mapper, example);
     }
 
+    public List<?> selectByExample(Class mapperClass, Class exampleClass, Object argumentsDto) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return  selectByExample(exampleClass,exampleClass,new BeanMap(argumentsDto));
+    }
+
+    public List<?> selectByExample(Class mapperClass, Class exampleClass, String argumentsJson) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return  selectByExample(exampleClass,exampleClass, JSON.parseObject(argumentsJson,Map.class));
+    }
+
     private Object getExampleObject(Class exampleClass, Map arguments) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Object example = SpringContextUtils.getBeanByClass(exampleClass);
         Object criteria = MethodUtils.invokeMethod(example, "or", null);
@@ -48,9 +59,26 @@ public class GeneralServiceImpl implements IGeneralService {
         return selectByExample(mapperClass,exampleClass,arguments,returnDtoBeanClass,convertObject.getClass());
     }
 
+    public List<?> selectByExample(Class mapperClass, Class exampleClass, Object argumentsDto, Class returnDtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Map map = new BeanMap(argumentsDto);
+        return selectByExample(mapperClass,exampleClass,map,returnDtoBeanClass);
+    }
+
+    public List<?> selectByExample(Class mapperClass, Class exampleClass, String argumentsJson, Class returnDtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return selectByExample(mapperClass,exampleClass,JSON.parseObject(argumentsJson,Map.class),returnDtoBeanClass);
+    }
+
     public List<?> selectByExample(Class mapperClass, Class exampleClass, Map arguments, Class returnDtoBeanClass, Class convertClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         List<?> list = selectByExample(mapperClass, exampleClass, arguments);
         return (List<?>) convertData(returnDtoBeanClass,convertClass,list);
+    }
+
+    public List<?> selectByExample(Class mapperClass, Class exampleClass, Object argumentsDto, Class returnDtoBeanClass, Class convertClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return selectByExample(mapperClass,exampleClass,new BeanMap(argumentsDto),returnDtoBeanClass,convertClass);
+    }
+
+    public List<?> selectByExample(Class mapperClass, Class exampleClass, String argumentsJson, Class returnDtoBeanClass, Class convertClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return selectByExample(mapperClass,exampleClass,JSON.parseObject(argumentsJson,Map.class),returnDtoBeanClass,convertClass);
     }
 
     public PageInfo<?> selectByExampleWithPaging(Class mapperClass, Class exampleClass, Map arguments) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
@@ -58,9 +86,26 @@ public class GeneralServiceImpl implements IGeneralService {
         return new PageInfo(objects);
     }
 
+    public PageInfo<?> selectByExampleWithPaging(Class mapperClass, Class exampleClass, Object argumentsDto) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return selectByExampleWithPaging(mapperClass,exampleClass,new BeanMap(argumentsDto));
+    }
+
+    public PageInfo<?> selectByExampleWithPaging(Class mapperClass, Class exampleClass, String argumentsJson) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return selectByExampleWithPaging(mapperClass,exampleClass,JSON.parseObject(argumentsJson,Map.class));
+    }
+
     public PageInfo<?> selectByExampleWithPaging(Class mapperClass, Class exampleClass, Map arguments, Class returnDtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Object convertObject = SpringContextUtils.getBeanById("generalBeanConvert");
         return selectByExampleWithPaging(mapperClass,exampleClass,arguments,returnDtoBeanClass,convertObject.getClass());
+    }
+
+    public PageInfo<?> selectByExampleWithPaging(Class mapperClass, Class exampleClass, Object argumentsDto, Class returnDtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Map map = new BeanMap(argumentsDto);
+        return  selectByExampleWithPaging(mapperClass,exampleClass,map,returnDtoBeanClass);
+    }
+
+    public PageInfo<?> selectByExampleWithPaging(Class mapperClass, Class exampleClass, String argumentsJson, Class returnDtoBeanClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return selectByExampleWithPaging(mapperClass,exampleClass,JSON.parseObject(argumentsJson,Map.class),returnDtoBeanClass);
     }
 
     public PageInfo<?> selectByExampleWithPaging(Class mapperClass, Class exampleClass, Map arguments, Class returnDtoBeanClass, Class convertClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
@@ -68,6 +113,14 @@ public class GeneralServiceImpl implements IGeneralService {
         List<?> entityList = pageInfo.getList();
         pageInfo.setList((List)convertData(returnDtoBeanClass, convertClass, entityList));
         return pageInfo;
+    }
+
+    public PageInfo<?> selectByExampleWithPaging(Class mapperClass, Class exampleClass, Object argumentsDto, Class returnDtoBeanClass, Class convertClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return  selectByExampleWithPaging(mapperClass,exampleClass,new BeanMap(argumentsDto),returnDtoBeanClass,convertClass);
+    }
+
+    public PageInfo<?> selectByExampleWithPaging(Class mapperClass, Class exampleClass, String argumentsJson, Class returnDtoBeanClass, Class convertClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return  selectByExampleWithPaging(mapperClass,exampleClass,JSON.parseObject(argumentsJson,Map.class),returnDtoBeanClass,convertClass);
     }
 
     public Integer insert(Class mapperClass, Object dto, Class convertClass) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
@@ -98,10 +151,26 @@ public class GeneralServiceImpl implements IGeneralService {
         return (Long) MethodUtils.invokeMethod(mapper,"countByExample",exampleObject);
     }
 
+    public Long countByExample(Class mapperClass, Class exampleClass, Object argumentsDto) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return  countByExample(mapperClass,exampleClass,new BeanMap(argumentsDto));
+    }
+
+    public Long countByExample(Class mapperClass, Class exampleClass, String argumentsJson) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return countByExample(mapperClass,exampleClass,JSON.parseObject(argumentsJson,Map.class));
+    }
+
     public Integer deleteByExample(Class mapperClass, Class exampleClass, Map arguments) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Object mapper = SpringContextUtils.getBeanByClass(mapperClass);
         Object exampleObject = getExampleObject(exampleClass, arguments);
         return (Integer) MethodUtils.invokeMethod(mapper,"deleteByExample",exampleObject);
+    }
+
+    public Integer deleteByExample(Class mapperClass, Class exampleClass, Object argumentsDto) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return  deleteByExample(mapperClass,exampleClass,new BeanMap(argumentsDto));
+    }
+
+    public Integer deleteByExample(Class mapperClass, Class exampleClass, String argumentsJson) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return deleteByExample(mapperClass,exampleClass,JSON.parseObject(argumentsJson,Map.class));
     }
 
     public Integer deleteByPrimaryKey(Class mapperClass, Object id) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
